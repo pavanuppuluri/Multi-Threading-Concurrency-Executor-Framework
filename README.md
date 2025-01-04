@@ -45,6 +45,20 @@ The Executor framework in Java provides several useful interfaces and classes fo
 | **WorkStealingPool**      | **Use case**: Parallel Product Search <br><br> **Scenario**: In an eCommerce platform, product searches are often computationally intensive, especially when customers filter products based on multiple attributes (size, color, price range, etc.). A WorkStealingPool helps distribute these search tasks efficiently among available threads, ensuring fast response times even during peak traffic. <br><br> **Example**: When a customer searches for a product, the search request is split into smaller sub-tasks (e.g., querying different product categories, sorting results by price, etc.), and these sub-tasks can be processed in parallel by the work-stealing pool, which optimizes thread utilization.|
 
 
+## CachedThreadPool vs WorkStealingPool
+
+| **Feature**               | **CachedThreadPool**                                         | **WorkStealingPool**                                      |
+|---------------------------|--------------------------------------------------------------|-----------------------------------------------------------|
+| **Thread Count**           | There is no fixed number of threads in a cached thread pool. It can grow indefinitely depending on the number of tasks. Threads are created and destroyed dynamically. | Starts with threads equal to the number of available processors (usually `Runtime.getRuntime().availableProcessors()`) and can dynamically increase if needed. |
+| **Idle Threads**           | Threads that are idle for more than **60 seconds** are terminated. | Threads can be idle, but the pool will typically not terminate them. They may steal work from other threads if idle. |
+| **Work Stealing**          | No work stealing. Threads handle tasks assigned to them.     | **Work Stealing**: Threads that finish their tasks can "steal" tasks from other threads that are still busy, optimizing work distribution. |
+| **Thread Reuse**           | Threads are reused if idle. If no threads are idle, new threads are created to handle tasks. | Threads are used for parallel task execution and work-stealing. It can dynamically scale, but the number of threads is typically constrained to the number of available processors. |
+| **Best For**               | Short-lived tasks with variable arrival times, such as handling HTTP requests. | Long-running, parallelizable tasks, such as computational tasks or divide-and-conquer algorithms. |
+| **Efficiency**             | Suitable for tasks that arrive at unpredictable rates but do not need to be divided into smaller pieces. | Best suited for tasks that can be divided into smaller sub-tasks, where work stealing helps to balance the load efficiently. |
+| **Example Use Cases**      | Web servers, <br><br> Dynamic task processing like file uploads, database queries. | Parallel computation tasks (e.g., large-scale data processing, matrix multiplication), <br><br> Product search in eCommerce platforms (parallel searches by category). |
+
+
+
 ### Customizing ` ThreadPoolExecutor `
 We can directly use the ThreadPoolExecutor class to have finer control over the behavior of your thread pool, such as the core pool size, maximum pool size, keep-alive time, and blocking queue.
 
