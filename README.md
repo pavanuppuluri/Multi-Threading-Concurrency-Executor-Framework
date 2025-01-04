@@ -2,8 +2,8 @@
 
 This repository covers 
 
-- different thread pools,
-- their key differences and
+- Java executor framework and different thread pools
+- their key differences
 - real world use cases
 - code examples
 
@@ -85,5 +85,5 @@ executor.shutdown();
 ```
 
 
-Thank you,
+Thank you,<br>
 Happy coding !!!
