@@ -1,5 +1,11 @@
 # Multi threading, Concurrency, Executor Framework
 
+This repository covers 
+
+- different thread pools,
+- their key differences and
+- real world use cases
+- code examples
 
 ## Java Executor Framework
 
@@ -77,3 +83,7 @@ for (int i = 0; i < 20; i++) {
 }
 executor.shutdown();
 ```
+
+
+Thank you,
+Happy coding !!!
